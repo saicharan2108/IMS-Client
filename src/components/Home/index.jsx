@@ -6,6 +6,7 @@ import { Oval } from "react-loader-spinner"
 import Tippy from "@tippyjs/react"
 import { toast } from "react-hot-toast"
 import Popup from "reactjs-popup"
+import HomeCharts from "../HomeCharts"
 
 import Navbar from "../Navbar"
 import TaskHeader from "../TaskHeader"
@@ -202,8 +203,12 @@ const Home = () => {
   return (
     <div className="home-container">
       <Navbar />
+
       <div className="home-main">
+      <img src ="https://res.cloudinary.com/dlovqnrza/image/upload/v1710952325/BEC_bmbdkx.jpg" alt="BEC" className="college-logo"/>
+
         <div className="greeting-container">
+      
           <p className="greeting-msg">Hi {name.split(" ")[0]},</p>
           <h1>
             Welcome Back <span className="wave">👋🏻</span>
@@ -217,188 +222,8 @@ const Home = () => {
             fetchTasks={fetchTasks}
           />
           <div className="task-list-container">
-            {loading ? (
-              <div className="loader-container">
-                <Oval
-                  height={55}
-                  width={55}
-                  color="#000"
-                  wrapperStyle={{}}
-                  wrapperClass=""
-                  visible={true}
-                  ariaLabel="oval-loading"
-                  secondaryColor="#fff"
-                  strokeWidth={2}
-                  strokeWidthSecondary={2}
-                />
-              </div>
-            ) : filteredTasks.length === 0 ? (
-              <div className="no-task-container">
-                <h2 className="no-task-msg">No Tasks Found ☹️</h2>
-              </div>
-            ) : (
-              filteredTasks.map((task, i) => (
-                <div className="task-card" key={task._id}>
-                  <div>
-                    <div className="task-card-header">
-                      <div className="title-container">
-                        <p><b>Company: </b>{task.company}</p>
-                       
-                        <div className="edit-container">
-                        <CgOptions
-                          className="edit-icon"
-                          onClick={() => {
-                            toggleEdit(!edit)
-                            setActiveEdit(i)
-                          }}
-                        />
-
-                        <div
-                          className={`edit-popup-container ${
-                            edit && activeEdit === i ? "display-edit" : ""
-                          }`}
-                          ref={editRef}
-                        >
-                          <Popup
-                            modal
-                            trigger={
-                              <button type="button" className="edit-popup-btn">
-                                Edit
-                              </button>
-                            }
-                            ref={updateRef}
-                          >
-                            <TaskForm
-                              handleTaskData={handleTaskData}
-                              loading={btnLoad}
-                              type="edit"
-                              task={task}
-                            />
-                          </Popup>
-                          <Popup
-                            modal
-                            trigger={
-                              <button type="button" className="edit-popup-btn">
-                                Delete
-                              </button>
-                            }
-                            ref={updateRef}
-                          >
-                            <div className="delete-popup-container">
-                              <h3>
-                                Are you sure you want to delete this task?
-                              </h3>
-                              <div className="delete-popup-btn-container">
-                                <button
-                                  type="button"
-                                  className="delete-popup-btn"
-                                  onClick={() => deleteTask(task)}
-                                >
-                                  {btnLoad ? (
-                                    <Oval
-                                      height={15}
-                                      width={15}
-                                      color="#000"
-                                      wrapperStyle={{}}
-                                      wrapperClass=""
-                                      visible={true}
-                                      ariaLabel="oval-loading"
-                                      secondaryColor="#fff"
-                                      strokeWidth={2}
-                                      strokeWidthSecondary={2}
-                                    />
-                                  ) : (
-                                    "Yes"
-                                  )}
-                                </button>
-                                <button
-                                  type="button"
-                                  className="delete-popup-btn"
-                                  onClick={() => updateRef.current.close()}
-                                >
-                                  No
-                                </button>
-                              </div>
-                            </div>
-                          </Popup>
-                        </div>
-                      </div>
-                       
-                      </div>
-                     
-                    </div>
-                    <p><b>Contact: </b>{task.contact}</p>
-                    <p><b>City: </b>{task.city}</p>
-                    <p><b>Project: </b>{task.project}</p>
-                    <p><b>Category: </b>{task.category}</p>
-                    <p><b>Quantity: </b>{task.quantity}</p>
-                    <p><b>Tasks: </b>{task.tasks}</p>
-                    <p className="start-icon">
-                            <b>Start Date:</b> {" "}
-                            {new Date(task.startDate).toLocaleString("en-us", {
-                              day: "numeric",
-                              month: "short",
-                              year: "2-digit",
-                            })}
-                          </p>
-                          <p className="due-icon">
-                            <b>Planned End Date: </b> {" "}
-                            {new Date(task.plannedEndDate).toLocaleString("en-us", {
-                              day: "numeric",
-                              month: "short",
-                              year: "2-digit",
-                            })}
-                          </p>
-                          <p className="due-icon">
-                            <b>Actual End Date:</b> {" "}
-                            {new Date(task.actualEndDate).toLocaleString("en-us", {
-                              day: "numeric",
-                              month: "short",
-                              year: "2-digit",
-                            })}
-                          </p>
-                    <p><b>Latest Update: </b>{task.latestUpdate}</p>
-                  </div>
-                  
-                  <div className="task-card-footer">
-                  <div
-                          className={`task-status ${statusColor(task.status)}`}
-                        >
-                          {task.status}
-                        </div>
-
-
-                        <div
-                          className={`task-status ${priorityColor(task.priority)}`}
-                        >
-                          {task.priority}
-                        </div>
-
-
-                    <div>
-                      {task.assignedUser !== task.createdBy && (
-                        <Tippy content={task.assignedUser}>
-                          <div className="task-profile-icon-2">
-                            {task.assignedUser
-                              .split(" ")
-                              .slice(0, 2)
-                              .map((item) => item[0])}
-                          </div>
-                        </Tippy>
-                      )}
-                      <Tippy content={task.createdBy}>
-                        <div className="task-profile-icon">
-                          {task.createdBy
-                            .split(" ")
-                            .slice(0, 2)
-                            .map((item) => item[0].toUpperCase())}
-                        </div>
-                      </Tippy>
-                    </div>
-                  </div>
-                </div>
-              ))
-            )}
+          <HomeCharts/>
+              
           </div>
         </div>
       </div>
